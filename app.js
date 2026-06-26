@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Inicializar datos cargando desde localStorage o inyectando mock data
+// Inicializar datos cargando desde localStorage o empezando desde vacío
 function initData() {
   const localClients = localStorage.getItem('climacold_clients');
   const localHistory = localStorage.getItem('climacold_history');
@@ -70,10 +70,9 @@ function initData() {
     state.history = JSON.parse(localHistory);
     migrateDataSchema();
   } else {
-    // Si está vacío, cargar datos de prueba dinámicos
-    const mock = generateMockData();
-    state.clients = mock.clients;
-    state.history = mock.history;
+    // Iniciar completamente vacío desde cero para uso real del cliente
+    state.clients = [];
+    state.history = [];
     saveToLocalStorage();
   }
 }
@@ -570,7 +569,6 @@ function setupEventListeners() {
   // Copias de seguridad
   document.getElementById('btn-export-data').addEventListener('click', exportBackup);
   document.getElementById('input-import-file').addEventListener('change', importBackup);
-  document.getElementById('btn-reset-demo').addEventListener('click', resetDemoData);
   document.getElementById('btn-clear-all').addEventListener('click', clearAllData);
 
   // Botón de activación manual de notificaciones
@@ -2009,22 +2007,7 @@ function importBackup(e) {
   e.target.value = '';
 }
 
-function resetDemoData() {
-  if (confirm('¿Estás seguro de que deseas restablecer la aplicación con los datos de demostración? Se perderán todos tus datos actuales.')) {
-    const mock = generateMockData();
-    state.clients = mock.clients;
-    state.history = mock.history;
-    
-    // Limpiar también log de notificaciones enviadas al reiniciar demo
-    localStorage.removeItem('climacold_notifications_sent');
-    
-    saveToLocalStorage();
-    closeDetailPanel();
-    renderApp();
-    alert('¡Datos de demostración restablecidos con éxito!');
-    document.getElementById('backup-dialog').close();
-  }
-}
+// resetDemoData fue eliminado para evitar confusión del cliente
 
 function clearAllData() {
   if (confirm('⚠️ ¿Estás seguro de que deseas vaciar TODOS los datos registrados? Esta acción eliminará definitivamente todos los clientes, equipos e historial de servicios para que puedas comenzar de cero. Esta acción no se puede deshacer.')) {
