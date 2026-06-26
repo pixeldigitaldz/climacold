@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Clientes - Multiservicios ClimaCold</title>
+  <meta name="description" content="Sistema de gestión de clientes y mantenimiento para Multiservicios ClimaCold. Climatízate con nosotros.">
+  
+  <!-- Google Fonts: Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  
+  <!-- Hoja de Estilos -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Manifest PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#090e0d">
+</head>
+<body>
+  
+  <!-- Contenedor Principal (Dashboard Grid) -->
+  <div class="app-container">
+    
+    <!-- Barra Lateral / Header Principal -->
+    <aside class="app-sidebar">
+      <header class="brand-header">
+        <div class="brand-logo">
+          <!-- Icono de Copo de Nieve y Aire -->
+          <svg class="icon icon-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            <path d="M2 12h20"/>
+            <path d="m16.24 7.76-8.48 8.48M7.76 7.76l8.48 8.48"/>
+          </svg>
+          <div class="brand-text">
+            <h1>ClimaCold</h1>
+            <span class="slogan">Climatízate con nosotros</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Métricas / Indicadores rápidos -->
+      <section class="stats-panel" aria-label="Estadísticas de servicio">
+        <div class="stat-card" id="stat-total-clients">
+          <div class="stat-icon bg-blue-subtle">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Clientes</span>
+            <span class="stat-value" id="val-total-clients">0</span>
+          </div>
+        </div>
+
+        <div class="stat-card" id="stat-up-to-date">
+          <div class="stat-card-inner">
+            <div class="stat-icon bg-green-subtle">
+              <svg class="icon text-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Al Día</span>
+              <span class="stat-value" id="val-ok-clients">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card" id="stat-upcoming">
+          <div class="stat-card-inner">
+            <div class="stat-icon bg-warning-subtle">
+              <svg class="icon text-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Pendientes</span>
+              <span class="stat-value" id="val-pending-clients">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card text-danger" id="stat-overdue">
+          <div class="stat-card-inner">
+            <div class="stat-icon bg-danger-subtle">
+              <svg class="icon text-danger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Vencidos</span>
+              <span class="stat-value" id="val-overdue-clients">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card" id="stat-receivables">
+          <div class="stat-card-inner">
+            <div class="stat-icon bg-receivables-subtle">
+              <svg class="icon text-receivables" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Por Cobrar</span>
+              <span class="stat-value" id="val-receivables">0</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Agenda de Citas -->
+      <section class="agenda-panel" aria-label="Agenda de Visitas" style="margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1.25rem;">
+        <h3 class="agenda-panel-title" style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem;">Próximas Citas</h3>
+        <div id="agenda-list" class="agenda-list" style="display: flex; flex-direction: column; gap: 0.65rem; max-height: 250px; overflow-y: auto;">
+          <div class="agenda-empty" style="font-size: 0.78rem; color: var(--text-muted); font-style: italic; text-align: center; padding: 1rem 0;">No hay citas agendadas</div>
+        </div>
+      </section>
+
+      <!-- Panel de Opciones / Copias de Seguridad -->
+      <footer class="sidebar-footer" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: auto; padding-top: 1.25rem; border-top: 1px solid var(--border-color);">
+        <button class="btn btn-secondary btn-full" id="btn-request-notifications" type="button" style="display: none; border-color: var(--status-pending-text); color: var(--status-pending-text); background-color: var(--status-pending-bg);">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          Activar Alertas
+        </button>
+        <button class="btn btn-secondary btn-full" id="btn-open-backup" type="button">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Respaldar Datos
+        </button>
+      </footer>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="app-main">
+      
+      <!-- Panel Superior de Acciones y Filtros -->
+      <section class="action-bar" aria-label="Controles del listado">
+        <div class="search-box">
+          <svg class="icon search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="search" id="input-search" placeholder="Buscar cliente por nombre o teléfono..." aria-label="Buscar cliente">
+        </div>
+
+        <div class="filter-actions">
+          <div class="filter-group">
+            <button class="btn-filter active" data-filter="all">Todos</button>
+            <button class="btn-filter" data-filter="ok">Al Día</button>
+            <button class="btn-filter" data-filter="pending">Próximos</button>
+            <button class="btn-filter" data-filter="overdue">Vencidos</button>
+            <button class="btn-filter" data-filter="debtors">Deudores</button>
+          </div>
+
+          <div class="filter-group-secondary">
+            <button class="btn-filter-type" data-type="all">Todos</button>
+            <button class="btn-filter-type" data-type="split">Split</button>
+            <button class="btn-filter-type" data-type="ventana">Ventana</button>
+            <button class="btn-filter-type" data-type="nevera">Nevera</button>
+            <button class="btn-filter-type" data-type="fricer">Fricer</button>
+          </div>
+
+          <button class="btn btn-primary" id="btn-add-client" type="button">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Nuevo Cliente
+          </button>
+        </div>
+      </section>
+
+      <!-- Rejilla de Clientes -->
+      <section class="clients-view" aria-label="Listado de Clientes">
+        <div class="clients-grid" id="clients-grid">
+          <!-- Las tarjetas de clientes se inyectarán dinámicamente con JS -->
+        </div>
+
+        <!-- Vista del Historial y Detalles del Cliente Seleccionado (Drawer Lateral) -->
+        <article class="client-detail-panel" id="client-detail-panel" hidden>
+          <div class="panel-header">
+            <button class="btn-close-panel" id="btn-close-detail" aria-label="Cerrar detalles">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <h2 class="panel-title">Ficha del Cliente</h2>
+          </div>
+
+          <div class="panel-body" id="detail-panel-body">
+            <!-- Cargado por JS -->
+          </div>
+        </article>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- ==================== MODALES (DIALOG) ==================== -->
+
+  <!-- Modal: Crear / Editar Cliente -->
+  <dialog id="client-dialog" class="custom-dialog" closedby="any">
+    <div class="dialog-content">
+      <header class="dialog-header">
+        <h3 id="client-dialog-title">Nuevo Cliente</h3>
+        <button class="btn-close-dialog" commandfor="client-dialog" command="close" aria-label="Cerrar modal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </header>
+      <form id="client-form" method="dialog" class="form-grid">
+        <input type="hidden" id="client-id" name="id">
+        
+        <div class="form-field">
+          <label for="client-name">Nombre *</label>
+          <input type="text" id="client-name" name="name" required placeholder="Ej: Carlos">
+        </div>
+
+        <div class="form-field">
+          <label for="client-surname">Apellido *</label>
+          <input type="text" id="client-surname" name="surname" required placeholder="Ej: Mendoza">
+        </div>
+
+        <div class="form-field">
+          <label for="client-phone">Teléfono *</label>
+          <input type="tel" id="client-phone" name="phone" required placeholder="Ej: +584125551234">
+        </div>
+
+        <div class="form-field full-width">
+          <label for="client-address">Dirección de Servicio</label>
+          <textarea id="client-address" name="address" rows="2" placeholder="Dirección completa del cliente..."></textarea>
+        </div>
+
+        <div class="form-field full-width">
+          <label for="client-notes">Notas / Instrucciones especiales</label>
+          <textarea id="client-notes" name="notes" rows="2" placeholder="Ej: Escalera alta requerida, llamar antes de ir..."></textarea>
+        </div>
+
+        <!-- Sección de Equipos Dinámica -->
+        <div class="form-section full-width">
+          <h4 class="form-section-title" style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.25rem;">Equipos Registrados</h4>
+          <div id="equipments-form-container" class="equipments-form-list" style="display: flex; flex-direction: column; gap: 1rem;">
+            <!-- Filas dinámicas inyectadas por JS -->
+          </div>
+          <button type="button" class="btn btn-secondary btn-full" id="btn-add-eq-row" style="margin-top: 0.75rem; min-block-size: 38px;">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Agregar Otro Equipo
+          </button>
+        </div>
+
+        <!-- Sección de Citas / Agenda -->
+        <div class="form-section full-width">
+          <h4 class="form-section-title" style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.25rem;">Agendar Próxima Visita (Opcional)</h4>
+          <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="form-field">
+                <label for="client-visit-date">Fecha de la Cita</label>
+                <input type="date" id="client-visit-date" name="visitDate">
+              </div>
+              <div class="form-field">
+                <label for="client-visit-time">Hora de la Cita</label>
+                <input type="time" id="client-visit-time" name="visitTime">
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="client-visit-reason">Motivo de la Visita</label>
+              <select id="client-visit-reason" name="visitReason">
+                <option value="">-- Sin Cita Activa --</option>
+                <option value="inspeccion">Inspección / Revisión</option>
+                <option value="mantenimiento">Mantenimiento</option>
+                <option value="reparacion">Reparación / Falla</option>
+                <option value="presupuesto">Presupuesto</option>
+                <option value="instalacion">Instalación de Aire Nuevo</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="client-visit-notes">Detalles / Síntomas de la Cita</label>
+              <textarea id="client-visit-notes" name="visitNotes" rows="1" placeholder="Ej: No enfría, cargar gas, cambiar motor ventilador..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <footer class="dialog-actions">
+          <button type="button" class="btn btn-secondary" commandfor="client-dialog" command="close">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-client">Guardar Cliente</button>
+        </footer>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Modal: Registrar Mantenimiento / Servicio -->
+  <dialog id="maintenance-dialog" class="custom-dialog" closedby="any">
+    <div class="dialog-content">
+      <header class="dialog-header">
+        <h3>Registrar Mantenimiento</h3>
+        <button class="btn-close-dialog" commandfor="maintenance-dialog" command="close" aria-label="Cerrar modal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </header>
+      <form id="maintenance-form" method="dialog" class="form-grid">
+        <input type="hidden" id="maintenance-client-id" name="clientId">
+
+        <div class="form-field full-width">
+          <p class="service-notice">Registrando servicio para: <strong id="maintenance-client-name">Cliente</strong></p>
+        </div>
+
+        <div class="form-field full-width">
+          <label for="maintenance-equipment-select">Equipo Atendido *</label>
+          <select id="maintenance-equipment-select" name="equipmentId" required>
+            <!-- Cargado por JS -->
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="maintenance-date">Fecha del Servicio</label>
+          <input type="date" id="maintenance-date" name="date" required>
+        </div>
+
+        <div class="form-field">
+          <label for="maintenance-next-interval">Próxima Visita (Meses)</label>
+          <input type="number" id="maintenance-next-interval" name="nextInterval" min="1" max="24" value="6" required>
+        </div>
+
+        <div class="form-field full-width">
+          <label for="maintenance-desc">Descripción del Trabajo Realizado *</label>
+          <textarea id="maintenance-desc" name="description" rows="3" required placeholder="Ej: Limpieza de turbina y serpentines, medición de amperaje, revisión de presión de refrigerante..."></textarea>
+        </div>
+
+        <div class="form-field full-width">
+          <label for="maintenance-notes">Observaciones para el futuro</label>
+          <textarea id="maintenance-notes" name="technicianNotes" rows="2" placeholder="Ej: El aspa del ventilador externo tiene fisuras ligeras. Monitorear."></textarea>
+        </div>
+
+        <!-- Información Financiera -->
+        <div class="form-section full-width financial-section">
+          <h4 class="form-section-title" style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.25rem;">Información de Cobro</h4>
+          <div class="financial-inputs-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+            <div class="form-field">
+              <label for="maintenance-price">Costo Total ($) *</label>
+              <input type="number" id="maintenance-price" name="price" min="0" step="0.01" value="0.00" required>
+            </div>
+            <div class="form-field">
+              <label for="maintenance-paid">Monto Pagado ($) *</label>
+              <input type="number" id="maintenance-paid" name="amountPaid" min="0" step="0.01" value="0.00" required>
+            </div>
+            <div class="form-field">
+              <label>Deuda / Pendiente ($)</label>
+              <div id="maintenance-debt-display" class="financial-debt-badge" style="display: flex; align-items: center; justify-content: center; height: 38px; border-radius: var(--radius-sm); font-weight: bold; background: var(--bg-input); border: 1px solid var(--border-color); font-size: 0.95rem;">$0.00</div>
+            </div>
+          </div>
+          <div class="form-field" id="maintenance-promise-container" style="margin-top: 0.75rem; display: none;">
+            <label for="maintenance-promise-date">Fecha Promesa de Pago *</label>
+            <input type="date" id="maintenance-promise-date" name="paymentPromiseDate">
+          </div>
+        </div>
+
+        <footer class="dialog-actions">
+          <button type="button" class="btn btn-secondary" commandfor="maintenance-dialog" command="close">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Registrar Servicio</button>
+        </footer>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Modal: Registrar Abono / Pago -->
+  <dialog id="payment-dialog" class="custom-dialog" closedby="any">
+    <div class="dialog-content">
+      <header class="dialog-header">
+        <h3>Registrar Abono / Pago</h3>
+        <button class="btn-close-dialog" commandfor="payment-dialog" command="close" aria-label="Cerrar modal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </header>
+      <form id="payment-form" method="dialog" class="form-grid">
+        <input type="hidden" id="payment-client-id" name="clientId">
+        
+        <div class="form-field full-width">
+          <p class="service-notice">Registrando pago para: <strong id="payment-client-name">Cliente</strong></p>
+          <p class="debt-notice" style="font-size: 0.85rem; margin-top: 0.25rem;">Deuda actual: <strong id="payment-current-debt" style="color: var(--status-overdue-text);">$0.00</strong></p>
+        </div>
+
+        <div class="form-field">
+          <label for="payment-amount">Monto del Abono ($) *</label>
+          <input type="number" id="payment-amount" name="amount" min="0.01" step="0.01" required placeholder="Ej: 20.00">
+        </div>
+
+        <div class="form-field">
+          <label for="payment-date">Fecha de Pago *</label>
+          <input type="date" id="payment-date" name="date" required>
+        </div>
+
+        <div class="form-field full-width">
+          <label for="payment-notes">Notas / Comentario del Pago</label>
+          <textarea id="payment-notes" name="notes" rows="2" placeholder="Ej: Pago parcial por transferencia..."></textarea>
+        </div>
+
+        <footer class="dialog-actions">
+          <button type="button" class="btn btn-secondary" commandfor="payment-dialog" command="close">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Registrar Pago</button>
+        </footer>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Modal: Selector y Personalización de WhatsApp -->
+  <dialog id="whatsapp-dialog" class="custom-dialog" closedby="any">
+    <div class="dialog-content" style="max-width: 480px;">
+      <header class="dialog-header">
+        <h3>Enviar Mensaje WhatsApp</h3>
+        <button class="btn-close-dialog" commandfor="whatsapp-dialog" command="close" aria-label="Cerrar modal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </header>
+      <form id="whatsapp-form" class="form-grid" style="padding: 1.25rem;">
+        <input type="hidden" id="wa-client-id">
+        <input type="hidden" id="wa-eq-id">
+        
+        <div class="form-field full-width">
+          <p class="service-notice" style="margin-bottom: 0.25rem;">Enviar a: <strong id="wa-client-name">Cliente</strong> (<span id="wa-eq-name">Equipo</span>)</p>
+        </div>
+
+        <div class="form-field full-width">
+          <label for="wa-msg-type">Tipo de Mensaje</label>
+          <select id="wa-msg-type" style="padding: 0.5rem;">
+            <option value="maintenance">Recordatorio de Mantenimiento</option>
+            <option value="followup">Seguimiento de Reparación / Servicio</option>
+          </select>
+        </div>
+
+        <!-- Campos dinámicos para seguimiento -->
+        <div class="form-field full-width" id="wa-followup-details" style="display: none;">
+          <label for="wa-service-select">Seleccionar Servicio Realizado</label>
+          <select id="wa-service-select" style="padding: 0.5rem;"></select>
+        </div>
+
+        <div class="form-field full-width">
+          <label for="wa-message-preview">Vista Previa del Mensaje</label>
+          <textarea id="wa-message-preview" rows="8" style="font-family: inherit; font-size: 0.85rem; line-height: 1.4; padding: 0.65rem;" placeholder="Escribe el mensaje aquí..."></textarea>
+        </div>
+
+        <footer class="dialog-actions full-width" style="margin-top: 0.5rem;">
+          <button type="button" class="btn btn-secondary" commandfor="whatsapp-dialog" command="close">Cancelar</button>
+          <button type="submit" class="btn btn-primary" style="background-color: var(--text-whatsapp); border-color: var(--text-whatsapp); color: #fff; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Abrir WhatsApp
+          </button>
+        </footer>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Modal: Copias de Seguridad (Backup) -->
+  <dialog id="backup-dialog" class="custom-dialog" closedby="any">
+    <div class="dialog-content">
+      <header class="dialog-header">
+        <h3>Respaldar e Importar Datos</h3>
+        <button class="btn-close-dialog" commandfor="backup-dialog" command="close" aria-label="Cerrar modal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </header>
+      <div class="backup-options">
+        <p class="dialog-text">Guarda una copia de seguridad de todos tus clientes e historial en tu computadora o importa una previamente guardada.</p>
+        
+        <div class="backup-action-card">
+          <h4>Exportar Datos</h4>
+          <p>Descarga un archivo con toda tu información registrada actual.</p>
+          <button class="btn btn-primary btn-full" id="btn-export-data" type="button">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar Respaldo (.json)
+          </button>
+        </div>
+
+        <div class="backup-action-card">
+          <h4>Importar Datos</h4>
+          <p>Sube un archivo de respaldo para restaurar tus clientes. <br><strong class="text-danger">Aviso: Esto sobrescribirá tus datos actuales.</strong></p>
+          
+          <label class="btn btn-secondary btn-full file-upload-label">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span>Seleccionar Archivo</span>
+            <input type="file" id="input-import-file" accept=".json" style="display: none;">
+          </label>
+        </div>
+
+        <div class="backup-action-card">
+          <h4>Datos de Prueba</h4>
+          <p>Restaurar la aplicación con los datos demo iniciales (incluye neveras y freezers de prueba). <br><strong class="text-danger">Aviso: Esto borrará tus datos actuales.</strong></p>
+          <button class="btn btn-secondary btn-full text-danger" id="btn-reset-demo" type="button">
+            Restaurar Demo
+          </button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Script Principal -->
+  <script src="app.js"></script>
+</body>
+</html>

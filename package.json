@@ -1,0 +1,12 @@
+{
+  "name": "climacold-app",
+  "version": "1.0.0",
+  "description": "Sistema de Gestión de Clientes - Multiservicios ClimaCold",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx -y http-server -p 3000"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
