@@ -40,6 +40,54 @@ let state = {
   }
 };
 
+// --- Helpers para Alert y Confirm Seguros (evita fallos en sandbox/iframe) ---
+function showAlert(message) {
+  try {
+    window.alert(message);
+  } catch (e) {
+    console.warn("Alert bloqueado por el navegador:", message);
+  }
+}
+
+function showConfirm(title, message, onAccept) {
+  const dialog = document.getElementById('confirm-dialog');
+  if (!dialog) {
+    try {
+      if (window.confirm(message)) {
+        onAccept();
+      }
+    } catch (e) {
+      console.warn("confirm() bloqueado, ejecutando acción directamente.");
+      onAccept();
+    }
+    return;
+  }
+
+  document.getElementById('confirm-title').textContent = title;
+  document.getElementById('confirm-message').textContent = message;
+
+  const btnCancel = document.getElementById('btn-confirm-cancel');
+  const btnAccept = document.getElementById('btn-confirm-accept');
+
+  // Clonar para evitar acumulamiento de listeners
+  const newCancel = btnCancel.cloneNode(true);
+  const newAccept = btnAccept.cloneNode(true);
+
+  btnCancel.parentNode.replaceChild(newCancel, btnCancel);
+  btnAccept.parentNode.replaceChild(newAccept, btnAccept);
+
+  newCancel.addEventListener('click', () => {
+    dialog.close();
+  });
+
+  newAccept.addEventListener('click', () => {
+    dialog.close();
+    onAccept();
+  });
+
+  dialog.showModal();
+}
+
 // --- 2. Inicialización y Carga de Datos ---
 document.addEventListener('DOMContentLoaded', () => {
   initData();
@@ -679,7 +727,7 @@ function addEquipmentRowField(data = null) {
     if (container.children.length > 1) {
       row.remove();
     } else {
-      alert('El cliente debe tener al menos un equipo registrado.');
+      showAlert('El cliente debe tener al menos un equipo registrado.');
     }
   });
 
@@ -708,7 +756,7 @@ function handleClientSubmit(e) {
   });
 
   if (equipments.length === 0) {
-    alert('Por favor agrega al menos un equipo.');
+    showAlert('Por favor agrega al menos un equipo.');
     return;
   }
 
@@ -1679,14 +1727,18 @@ function confirmDeleteClient(clientId) {
   if (!client) return;
 
   const confirmMsg = `¿Estás seguro de que deseas eliminar permanentemente a ${client.name} ${client.surname}? Se borrarán todos sus equipos e historial.`;
-  if (confirm(confirmMsg)) {
-    state.clients = state.clients.filter(c => c.id !== clientId);
-    state.history = state.history.filter(h => h.clientId !== clientId);
-    
-    saveToLocalStorage();
-    closeDetailPanel();
-    renderApp();
-  }
+  showConfirm(
+    'Eliminar Cliente',
+    confirmMsg,
+    () => {
+      state.clients = state.clients.filter(c => c.id !== clientId);
+      state.history = state.history.filter(h => h.clientId !== clientId);
+      
+      saveToLocalStorage();
+      closeDetailPanel();
+      renderApp();
+    }
+  );
 }
 
 // --- 10. WhatsApp Link Builder ---
@@ -1981,25 +2033,29 @@ function importBackup(e) {
       const importedData = JSON.parse(event.target.result);
       
       if (Array.isArray(importedData.clients) && Array.isArray(importedData.history)) {
-        if (confirm('¿Estás seguro de importar este archivo? Se reemplazarán todos tus clientes y mantenimientos actuales.')) {
-          state.clients = importedData.clients;
-          state.history = importedData.history;
-          
-          migrateDataSchema(); 
-          recalculateAllDebts();
-          saveToLocalStorage();
-          closeDetailPanel();
-          renderApp();
-          
-          alert('¡Importación completada con éxito!');
-          document.getElementById('backup-dialog').close();
-        }
+        showConfirm(
+          'Importar Datos',
+          '¿Estás seguro de importar este archivo? Se reemplazarán todos tus clientes y mantenimientos actuales.',
+          () => {
+            state.clients = importedData.clients;
+            state.history = importedData.history;
+            
+            migrateDataSchema(); 
+            recalculateAllDebts();
+            saveToLocalStorage();
+            closeDetailPanel();
+            renderApp();
+            
+            showAlert('¡Importación completada con éxito!');
+            document.getElementById('backup-dialog').close();
+          }
+        );
       } else {
-        alert('El archivo seleccionado no tiene el formato de respaldo válido de ClimaCold.');
+        showAlert('El archivo seleccionado no tiene el formato de respaldo válido de ClimaCold.');
       }
     } catch (err) {
       console.error(err);
-      alert('Ocurrió un error al leer el archivo. Asegúrate de seleccionar un archivo JSON válido.');
+      showAlert('Ocurrió un error al leer el archivo. Asegúrate de seleccionar un archivo JSON válido.');
     }
   };
   
@@ -2010,17 +2066,21 @@ function importBackup(e) {
 // resetDemoData fue eliminado para evitar confusión del cliente
 
 function clearAllData() {
-  if (confirm('⚠️ ¿Estás seguro de que deseas vaciar TODOS los datos registrados? Esta acción eliminará definitivamente todos los clientes, equipos e historial de servicios para que puedas comenzar de cero. Esta acción no se puede deshacer.')) {
-    state.clients = [];
-    state.history = [];
-    
-    // Limpiar también log de notificaciones enviadas
-    localStorage.removeItem('climacold_notifications_sent');
-    
-    saveToLocalStorage();
-    closeDetailPanel();
-    renderApp();
-    alert('¡Se han eliminado todos los datos! La aplicación está lista para comenzar a registrar nuevos clientes.');
-    document.getElementById('backup-dialog').close();
-  }
+  showConfirm(
+    'Limpiar Base de Datos',
+    '⚠️ ¿Estás seguro de que deseas vaciar TODOS los datos registrados? Esta acción eliminará definitivamente todos los clientes, equipos e historial de servicios para que puedas comenzar de cero. Esta acción no se puede deshacer.',
+    () => {
+      state.clients = [];
+      state.history = [];
+      
+      // Limpiar también log de notificaciones enviadas
+      localStorage.removeItem('climacold_notifications_sent');
+      
+      saveToLocalStorage();
+      closeDetailPanel();
+      renderApp();
+      showAlert('¡Se han eliminado todos los datos! La aplicación está lista para comenzar a registrar nuevos clientes.');
+      document.getElementById('backup-dialog').close();
+    }
+  );
 }

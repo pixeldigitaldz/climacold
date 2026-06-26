@@ -477,6 +477,18 @@
     </div>
   </dialog>
 
+  <!-- Modal: Confirmación Personalizada (para evitar bloqueos de confirm() en iframe/sandboxes) -->
+  <dialog id="confirm-dialog" class="custom-dialog" style="max-width: 400px;">
+    <div class="dialog-content" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+      <h3 id="confirm-title" style="font-size: 1.1rem; font-weight: 800; color: var(--text-main);">Confirmar Acción</h3>
+      <p id="confirm-message" style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;"></p>
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem; border-top: 1px solid var(--border-color); padding-top: 1rem; margin-top: 0.5rem;">
+        <button class="btn btn-secondary" id="btn-confirm-cancel" type="button">Cancelar</button>
+        <button class="btn btn-primary" id="btn-confirm-accept" type="button" style="border-color: var(--status-overdue-bg); background-color: var(--status-overdue-bg); color: var(--status-overdue-text);">Confirmar</button>
+      </div>
+    </div>
+  </dialog>
+
   <!-- Script Principal -->
   <script src="app.js"></script>
 </body>
