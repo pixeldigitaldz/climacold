@@ -571,6 +571,7 @@ function setupEventListeners() {
   document.getElementById('btn-export-data').addEventListener('click', exportBackup);
   document.getElementById('input-import-file').addEventListener('change', importBackup);
   document.getElementById('btn-reset-demo').addEventListener('click', resetDemoData);
+  document.getElementById('btn-clear-all').addEventListener('click', clearAllData);
 
   // Botón de activación manual de notificaciones
   document.getElementById('btn-request-notifications').addEventListener('click', requestNotificationPermissions);
@@ -2021,6 +2022,22 @@ function resetDemoData() {
     closeDetailPanel();
     renderApp();
     alert('¡Datos de demostración restablecidos con éxito!');
+    document.getElementById('backup-dialog').close();
+  }
+}
+
+function clearAllData() {
+  if (confirm('⚠️ ¿Estás seguro de que deseas vaciar TODOS los datos registrados? Esta acción eliminará definitivamente todos los clientes, equipos e historial de servicios para que puedas comenzar de cero. Esta acción no se puede deshacer.')) {
+    state.clients = [];
+    state.history = [];
+    
+    // Limpiar también log de notificaciones enviadas
+    localStorage.removeItem('climacold_notifications_sent');
+    
+    saveToLocalStorage();
+    closeDetailPanel();
+    renderApp();
+    alert('¡Se han eliminado todos los datos! La aplicación está lista para comenzar a registrar nuevos clientes.');
     document.getElementById('backup-dialog').close();
   }
 }

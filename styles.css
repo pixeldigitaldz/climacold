@@ -1093,6 +1093,9 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    max-height: 65vh;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .dialog-text {
@@ -1279,20 +1282,31 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 0.5rem;
   }
 
   .agenda-item-name {
     font-size: 0.8rem;
     font-weight: 700;
     color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    flex: 1;
   }
 
   .agenda-item-badge {
     font-size: 0.6rem;
     font-weight: 800;
     text-transform: uppercase;
-    padding: 0.1rem 0.35rem;
+    padding: 0.15rem 0.4rem;
     border-radius: var(--radius-sm);
+    flex-shrink: 0;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
   }
 
   .badge-inspeccion {

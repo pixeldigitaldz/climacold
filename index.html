@@ -107,7 +107,7 @@
       <!-- Agenda de Citas -->
       <section class="agenda-panel" aria-label="Agenda de Visitas" style="margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1.25rem;">
         <h3 class="agenda-panel-title" style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem;">Próximas Citas</h3>
-        <div id="agenda-list" class="agenda-list" style="display: flex; flex-direction: column; gap: 0.65rem; max-height: 250px; overflow-y: auto;">
+        <div id="agenda-list" class="agenda-list" style="display: flex; flex-direction: column; gap: 0.65rem; max-height: 280px; overflow-y: auto; overflow-x: hidden; padding-right: 4px;">
           <div class="agenda-empty" style="font-size: 0.78rem; color: var(--text-muted); font-style: italic; text-align: center; padding: 1rem 0;">No hay citas agendadas</div>
         </div>
       </section>
@@ -473,6 +473,14 @@
           <p>Restaurar la aplicación con los datos demo iniciales (incluye neveras y freezers de prueba). <br><strong class="text-danger">Aviso: Esto borrará tus datos actuales.</strong></p>
           <button class="btn btn-secondary btn-full text-danger" id="btn-reset-demo" type="button">
             Restaurar Demo
+          </button>
+        </div>
+
+        <div class="backup-action-card" style="border-color: var(--status-overdue-bg);">
+          <h4 class="text-danger">Limpiar Base de Datos</h4>
+          <p>Elimina todos los clientes e historial para empezar la aplicación de cero con datos reales de tus clientes. <br><strong class="text-danger">Aviso: Esta acción borrará de forma permanente todo el contenido.</strong></p>
+          <button class="btn btn-secondary btn-full text-danger" id="btn-clear-all" type="button">
+            Vaciar todo y empezar de 0
           </button>
         </div>
       </div>
