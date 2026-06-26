@@ -6,7 +6,7 @@ const EQUIPMENT_LABELS = {
   split: '❄️ Split',
   ventana: '🔲 Ventana',
   nevera: '🥛 Nevera',
-  fricer: '🧊 Fricer'
+  freezer: '🧊 Freezer'
 };
 
 const VISIT_REASON_LABELS = {
@@ -35,7 +35,7 @@ let state = {
   selectedClientId: null,
   filters: {
     status: 'all', // 'all', 'ok', 'pending', 'overdue'
-    type: 'all',   // 'all', 'split', 'ventana', 'nevera', 'fricer'
+    type: 'all',   // 'all', 'split', 'ventana', 'nevera', 'freezer'
     search: ''
   }
 };
@@ -155,6 +155,16 @@ function migrateDataSchema() {
     if (client.totalDebt === undefined) {
       client.totalDebt = 0;
       migrated = true;
+    }
+    // 4. Migración de fricer a freezer
+    if (client.equipments) {
+      client.equipments = client.equipments.map(eq => {
+        if (eq.type === 'fricer') {
+          eq.type = 'freezer';
+          migrated = true;
+        }
+        return eq;
+      });
     }
     return client;
   });
@@ -687,7 +697,7 @@ function addEquipmentRowField(data = null) {
           <option value="split" ${defaultType === 'split' ? 'selected' : ''}>Split</option>
           <option value="ventana" ${defaultType === 'ventana' ? 'selected' : ''}>Ventana</option>
           <option value="nevera" ${defaultType === 'nevera' ? 'selected' : ''}>Nevera</option>
-          <option value="fricer" ${defaultType === 'fricer' ? 'selected' : ''}>Fricer</option>
+          <option value="freezer" ${defaultType === 'freezer' ? 'selected' : ''}>Freezer</option>
         </select>
       </div>
 
@@ -1046,7 +1056,7 @@ function generateWhatsAppPreview() {
   let message = '';
   
   if (type === 'maintenance') {
-    const eqLabel = eq.type === 'split' ? 'Aire Acondicionado Split ❄️' : (eq.type === 'ventana' ? 'Aire Acondicionado de Ventana 🔲' : (eq.type === 'nevera' ? 'Nevera 🥛' : 'Freezer/Fricer 🧊'));
+    const eqLabel = eq.type === 'split' ? 'Aire Acondicionado Split ❄️' : (eq.type === 'ventana' ? 'Aire Acondicionado de Ventana 🔲' : (eq.type === 'nevera' ? 'Nevera 🥛' : 'Freezer 🧊'));
     const equipmentStr = `su *${eqLabel} (${eq.brand})* para el día *${formatDate(eq.nextDate)}*`;
 
     message = `Hola *${client.name} ${client.surname}*, le saluda el equipo de *Multiservicios ClimaCold*. ❄️ Le escribimos para recordarle que ya le corresponde el mantenimiento preventivo de ${equipmentStr}.
@@ -1810,7 +1820,7 @@ Agradecemos nos confirme si se mantiene la cita para coordinar la ruta de nuestr
       eq = getEarliestMaintenanceEquipment(client);
     }
 
-    const eqLabel = eq.type === 'split' ? 'Aire Acondicionado Split ❄️' : (eq.type === 'ventana' ? 'Aire Acondicionado de Ventana 🔲' : (eq.type === 'nevera' ? 'Nevera 🥛' : 'Freezer/Fricer 🧊'));
+    const eqLabel = eq.type === 'split' ? 'Aire Acondicionado Split ❄️' : (eq.type === 'ventana' ? 'Aire Acondicionado de Ventana 🔲' : (eq.type === 'nevera' ? 'Nevera 🥛' : 'Freezer 🧊'));
     const equipmentStr = `su *${eqLabel} (${eq.brand})* para el día *${formatDate(eq.nextDate)}*`;
 
     message = `Hola *${client.name} ${client.surname}*, le saluda el equipo de *Multiservicios ClimaCold*. ❄️ Le escribimos para recordarle que ya le corresponde el mantenimiento preventivo de ${equipmentStr}.
