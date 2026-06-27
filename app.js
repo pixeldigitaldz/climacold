@@ -817,6 +817,14 @@ function handleClientSubmit(e) {
   document.getElementById('client-dialog').close();
   renderApp();
 
+  if (scheduledVisit) {
+    const reasonLabel = VISIT_REASON_LABELS[scheduledVisit.reason] || 'Visita';
+    sendBrowserNotification(
+      `Cita Agendada 📅`,
+      `Se programó "${reasonLabel}" para ${clientData.name} ${clientData.surname} el ${formatDate(scheduledVisit.date)} a las ${scheduledVisit.time} hs.`
+    );
+  }
+
   if (state.selectedClientId === clientId) {
     showClientDetail(clientId);
   }
@@ -911,6 +919,13 @@ function handleMaintenanceSubmit(e) {
   saveToLocalStorage();
   document.getElementById('maintenance-dialog').close();
   e.target.reset();
+
+  if (paymentPromiseDate && debt > 0) {
+    sendBrowserNotification(
+      `Cobro Agendado 💰`,
+      `Se programó promesa de pago de ${client.name} ${client.surname} por $${debt.toFixed(2)} para el ${formatDate(paymentPromiseDate)}.`
+    );
+  }
 
   renderApp();
   showClientDetail(clientId);
@@ -1844,6 +1859,13 @@ function initNotifications() {
   }
 
   updateNotificationButtonState();
+
+  // Verificar notificaciones inmediatamente cuando la aplicación pasa a primer plano (el usuario la abre o desbloquea)
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      checkAndSendNotifications();
+    }
+  });
 }
 
 function updateNotificationButtonState() {
