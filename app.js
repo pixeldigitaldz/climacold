@@ -156,11 +156,15 @@ function migrateDataSchema() {
       client.totalDebt = 0;
       migrated = true;
     }
-    // 4. Migración de fricer a freezer
+    // 4. Migración de fricer a freezer y asegurar campo 'gas'
     if (client.equipments) {
       client.equipments = client.equipments.map(eq => {
         if (eq.type === 'fricer') {
           eq.type = 'freezer';
+          migrated = true;
+        }
+        if (!eq.gas) {
+          eq.gas = 'N/A';
           migrated = true;
         }
         return eq;
@@ -682,6 +686,7 @@ function addEquipmentRowField(data = null) {
   const defaultNextDate = data ? data.nextDate : addMonths(todayStr, defaultInterval);
   const defaultType = data ? data.type : 'split';
   const defaultBrand = data ? data.brand : '';
+  const defaultGas = data ? (data.gas || 'N/A') : 'N/A';
 
   const row = document.createElement('div');
   row.className = 'equipment-row';
@@ -704,6 +709,19 @@ function addEquipmentRowField(data = null) {
       <div class="form-field">
         <label>Marca / Detalle</label>
         <input type="text" class="eq-brand" required placeholder="Ej: LG JetCool 12k BTU" value="${defaultBrand}">
+      </div>
+
+      <div class="form-field">
+        <label>Tipo de Gas</label>
+        <select class="eq-gas">
+          <option value="N/A" ${defaultGas === 'N/A' ? 'selected' : ''}>N/A</option>
+          <option value="R32" ${defaultGas === 'R32' ? 'selected' : ''}>R32</option>
+          <option value="R410A" ${defaultGas === 'R410A' ? 'selected' : ''}>R410A</option>
+          <option value="R22" ${defaultGas === 'R22' ? 'selected' : ''}>R22</option>
+          <option value="R134a" ${defaultGas === 'R134a' ? 'selected' : ''}>R134a</option>
+          <option value="R600a" ${defaultGas === 'R600a' ? 'selected' : ''}>R600a</option>
+          <option value="R290" ${defaultGas === 'R290' ? 'selected' : ''}>R290</option>
+        </select>
       </div>
 
       <div class="form-field">
@@ -760,6 +778,7 @@ function handleClientSubmit(e) {
       id: row.querySelector('.eq-id').value,
       type: row.querySelector('.eq-type').value,
       brand: row.querySelector('.eq-brand').value.trim() || 'Equipo',
+      gas: row.querySelector('.eq-gas').value,
       interval: parseInt(row.querySelector('.eq-interval').value) || 6,
       nextDate: row.querySelector('.eq-next-date').value
     });
@@ -1462,7 +1481,10 @@ function showClientDetail(clientId) {
             </span>
           </div>
         </div>
-        <div style="font-weight: 700; font-size: 0.85rem; margin-top: 2px;">${eq.brand}</div>
+        <div style="font-weight: 700; font-size: 0.85rem; margin-top: 2px; display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
+          <span>${eq.brand}</span>
+          ${eq.gas && eq.gas !== 'N/A' ? `<span style="font-size: 0.68rem; font-weight: 800; color: var(--primary); background-color: var(--primary-subtle); padding: 0.1rem 0.35rem; border-radius: 4px;">${eq.gas}</span>` : ''}
+        </div>
         <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">
           <span>Frecuencia: ${eq.interval} meses</span>
           <span>Próximo: <strong>${formatDate(eq.nextDate)}</strong></span>
@@ -1836,7 +1858,8 @@ Agradecemos nos confirme si se mantiene la cita para coordinar la ruta de nuestr
     }
 
     const eqLabel = eq.type === 'split' ? 'Aire Acondicionado Split ❄️' : (eq.type === 'ventana' ? 'Aire Acondicionado de Ventana 🔲' : (eq.type === 'nevera' ? 'Nevera 🥛' : 'Freezer 🧊'));
-    const equipmentStr = `su *${eqLabel} (${eq.brand})* para el día *${formatDate(eq.nextDate)}*`;
+    const gasStr = eq.gas && eq.gas !== 'N/A' ? ` - Gas: ${eq.gas}` : '';
+    const equipmentStr = `su *${eqLabel} (${eq.brand}${gasStr})* para el día *${formatDate(eq.nextDate)}*`;
 
     message = `Hola *${client.name} ${client.surname}*, le saluda el equipo de *Multiservicios ClimaCold*. ❄️ Le escribimos para recordarle que ya le corresponde el mantenimiento preventivo de ${equipmentStr}.
 
