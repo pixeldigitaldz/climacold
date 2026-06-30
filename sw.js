@@ -1,4 +1,4 @@
-const CACHE_NAME = 'climacold-cache-v5';
+const CACHE_NAME = 'climacold-cache-v6';
 const ASSETS = [
   './',
   './index.html',

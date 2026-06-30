@@ -1973,19 +1973,19 @@ function checkAndSendNotifications() {
         }
       }
 
-      // REGLA 3: Cita hoy, falta 1 hora o menos para la visita (cerca de la hora)
+      // REGLA 3: Cita hoy, faltan 2 horas o menos para la visita (cerca de la hora)
       if (visit.date === todayStr) {
         const [visitH, visitM] = visit.time.split(':').map(Number);
         const visitTimeDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), visitH, visitM, 0);
         const diffMs = visitTimeDate - now;
         const diffMin = Math.round(diffMs / 60000);
 
-        if (diffMin > 0 && diffMin <= 60) {
+        if (diffMin > 0 && diffMin <= 120) {
           const key = `visit-approaching-${client.id}-${visit.date}-${visit.time}`;
           if (!sentNotifications[key]) {
             sendBrowserNotification(
-              `Cita Próxima en ${diffMin} min ⏰`,
-              `A las ${visit.time} hs tienes cita de ${reasonLabel} con ${client.name} ${client.surname}.`
+              `Cita Próxima: ${reasonLabel} ⏰`,
+              `Faltan ${diffMin} minutos (a las ${visit.time} hs) para tu cita con ${client.name} ${client.surname}.`
             );
             sentNotifications[key] = true;
             updatedSent = true;
